@@ -131,10 +131,43 @@ def data_cleaning():
 def configuration():
     messagebox.showinfo(message='En mantenimiento',title='Configuración')
 
+def sync():
+    wb = openpyxl.load_workbook('archivo_destino.xlsx')
+    ws = wb['Sheet']
+    fila1 = ws[1]
+
+    wb2 = openpyxl.load_workbook('archivo_limpio.xlsx')
+    ws2 = wb2['Sheet']
+    
+    wb3 = openpyxl.Workbook()
+    ws3 = wb3['Sheet']
+
+    for celda in ws[1]:
+        ws3[celda.coordinate].value=celda.value
+
+    for i, fila in enumerate(ws2.iter_rows(min_row=1, max_row=ws2.max_row)):
+        fila_nueva = i+2
+        for celda in fila:
+            coordenada=celda.coordinate
+            coordenada=coordenada[0]+str(fila_nueva)
+            ws3[coordenada].value=celda.value
+
+    wb3.save('archivo_sincronizado.xlsx')
+
+    messagebox.showinfo(message='Procesado con exito',title='Syncronizacion de archivos')
+
+def local():
+    # Obtenemos el directorio de la carpeta local del proyecto
+    carpeta_local = os.path.dirname(__file__)
+    # Abre la carpeta local del proyecto en el explorador de archivos
+    os.startfile(carpeta_local)
+
 ResImg1 = PhotoImage(file = 'images/amp82-i72es.png')  
-ResImg2 = PhotoImage(file = 'images/ajz64-jetye.png')
-ResImg3 = PhotoImage(file = 'images/a829o-czvx.png')
+ResImg2 = PhotoImage(file = 'images/aiy8l-mz80y.png')
+ResImg3 = PhotoImage(file = 'images/aazfb-yy3p1.png')
 ResImg4 = PhotoImage(file = 'images/as8gb-3xzre.png')
+ResImg5 = PhotoImage(file = 'images/a3wja-6bdwm.png') 
+ResImg6 = PhotoImage(file = 'images/a6g66-ll38e.png') 
 #ResImg3 = img3.subsample(24,24)
 
 button1 = tk.Button(text='Selecciona los archivos a exportar',border = 0, image = ResImg1, command=seleccionar_archivos, compound='left') 
@@ -147,7 +180,13 @@ button4 = tk.Button(text='Limpieza de datos', border=0, image = ResImg4, command
 button4.place(x=50, y=100)
 
 button3 = tk.Button(text='Configuración',border = 0, image = ResImg3, command=configuration, compound='left' )
-button3.place(x=50, y=150)
+button3.place(x=50, y=300)
+
+button5 = tk.Button(text='Sincronizar datos con el archivo destino',border=0,image=ResImg5,command=sync,compound='left')
+button5.place(x=50,y=150)
+
+button6 = tk.Button(text='Abrir carpeta del destino',border=0,image=ResImg6,command=local,compound='left')
+button6.place(x=50,y=200)
 
 
 window.mainloop()
