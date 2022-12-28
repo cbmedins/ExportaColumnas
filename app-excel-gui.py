@@ -9,9 +9,31 @@ import xlsxwriter
 
 # Crea una ventana de tkinter
 window = tk.Tk()
-window.geometry('400x600')
 window.resizable(0,0)
-window.title('Aplicativo para exportar columnas')    
+window.title('Aplicativo para exportar columnas')  
+window.iconbitmap('images/icon.ico') 
+
+screen_width = window.winfo_screenwidth()
+screen_height = window.winfo_screenheight()
+#dimensiones de la ventana
+window.geometry('400x600')
+# Calcula la posición x e y para centrar la ventana
+x_coord = (screen_width/2) - (400/2)
+y_coord = (screen_height/2) - (600/2)
+# Usa geometry() para mover la ventana a la posición calculada
+window.geometry('+%d+%d' % (x_coord, y_coord))
+
+
+# Crea un widget Frame como separador
+separator = tk.Frame(window, height=2, bd=1, relief='sunken')
+# Coloca el widget Frame al final de la ventana
+separator.pack(side='bottom', fill='x')
+# Crea un widget Label para el pie de página
+footer_label = tk.Label(window, text='Created by Cristhian Medina')
+# Coloca el widget Label debajo del separador
+footer_label.pack(side='bottom')
+
+
 
 # Crea una función para seleccionar los archivos de Excel
 def seleccionar_archivos():
@@ -44,7 +66,7 @@ def seleccionar_archivos():
     messagebox.showinfo(message='Procesado con exito',title='Selecciona los archivos')
 
 def converter():
-    messagebox.showinfo(message='Al momento esta utilidad se encuentra en desarrollo',title='Converter')
+    messagebox.showinfo(message='Solo se pueden convertir archivos de tipo xsl ya que no son compatibles con la libreria openpyxl',title='Converter')
     # Abrimos el archivo XLS
    # Abrimos el archivo XLS con xlrd
     archivos = tk.filedialog.askopenfilenames(parent=window, title='Seleccionar archivos')
@@ -106,7 +128,8 @@ def data_cleaning():
     wb2.save('archivo_limpio.xlsx')
     messagebox.showinfo(message='Procesado con exito',title='Limpieza de datos')
 
-
+def configuration():
+    messagebox.showinfo(message='En mantenimiento',title='Configuración')
 
 ResImg1 = PhotoImage(file = 'images/amp82-i72es.png')  
 ResImg2 = PhotoImage(file = 'images/ajz64-jetye.png')
@@ -123,7 +146,7 @@ button2.place(x=50)
 button4 = tk.Button(text='Limpieza de datos', border=0, image = ResImg4, command=data_cleaning, compound='left')
 button4.place(x=50, y=100)
 
-button3 = tk.Button(text='Configuración',border = 0, image = ResImg3, command=converter, compound='left' )
+button3 = tk.Button(text='Configuración',border = 0, image = ResImg3, command=configuration, compound='left' )
 button3.place(x=50, y=150)
 
 
