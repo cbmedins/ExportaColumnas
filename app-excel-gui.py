@@ -5,13 +5,14 @@ import os
 import tkinter as tk
 import xlrd
 import xlsxwriter
+import re
 
 
 # Crea una ventana de tkinter
 window = tk.Tk()
 window.resizable(0,0)
 window.title('Aplicativo para exportar columnas')  
-window.iconbitmap('images/icon.ico') 
+window.iconbitmap('images/icon.ico') #
 
 screen_width = window.winfo_screenwidth()
 screen_height = window.winfo_screenheight()
@@ -143,10 +144,21 @@ def sync():
     ws3 = wb3['Sheet']
 
     for celda in ws[1]:
+        A=(celda.coordinate)#obtener codernada de la primer celda
+        regex = re.compile(r'([RM])(\s+)(\d+)')
+        matches = regex.findall(celda.value)
+        i=4
+        print(matches)
+
+        for match in matches:
+            ws3[A[0]+str(i)].value=match[2]#escribir en la codernada sin el numero ya que es reemplazado por el acumulador
+            i = i+1 # acumula uno
+
         ws3[celda.coordinate].value=celda.value
+        
 
     for i, fila in enumerate(ws2.iter_rows(min_row=1, max_row=ws2.max_row)):
-        fila_nueva = i+2
+        fila_nueva = i+6
         for celda in fila:
             coordenada=celda.coordinate
             coordenada=coordenada[0]+str(fila_nueva)
